@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EasySports</title>
+
+    <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+
+</head>
+<body>
+    <h1>Doclist</h1>
+
+        <form method="POST" action="">
+        {% csrf_token %}
+
+        <input type="text" name="collection-name">
+        <button hx-post="{% url 'add-collection' %}"
+                hx-target="#collections"
+                hx-swap="beforeend"
+                type="submit">Ajouter une collection</button>
+    </form>
+
+
+    <div id="collections">
+    {% for collection in collection %}
+        <h2 id="event">{{ collection.name }}</h2>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" name="liste_connection_name" value="{{ collection.name }}">
+            <input type="text" name="participant-name">
+            <button hx-post="{% url 'add-participant' %}"
+                    hx-target=".liste_participant"
+                    hx-swap="beforeend"
+                    type="submit">Ajouter un utilisateur</button>
+        <p class="liste_participant"></p>
+        </form>
+        {% for participant in participant %}
+                {% if participant.title == collection.name %}
+                    <p>{{ participant.name }}</p>
+                {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
+
+
+<script>
+    document.body.addEventListener("htmx:responseError", function(evt) {
+        alert(evt.detail.xhr.responseText);
+    })
+</script>
+
+</body>
+</html>
