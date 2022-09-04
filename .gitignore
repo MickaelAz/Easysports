@@ -1,3 +1,4 @@
 requirements.txt
+/easysports/settings.py
 /venv
 /events/migrations
